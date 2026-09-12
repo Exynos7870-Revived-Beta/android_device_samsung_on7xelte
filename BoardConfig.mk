@@ -16,14 +16,14 @@
 DEVICE_PATH := device/samsung/on7xelte
 
 # Audio
-# TFA-Audio
-BOARD_USES_EXYNOS7870_TFA_AMP := true
-
-# exynos7870 OSS audio hal
-TARGET_AUDIOHAL_VARIANT := samsung-exynos7870
+TARGET_BOARD_HAS_OSS_AUDIO_HAL := true
+TARGET_BOARD_HAS_A6LTE_AUDIO_HAL := false
+TARGET_BOARD_HAS_M10LTE_AUDIO_HAL := false
+TARGET_BOARD_HAS_TFA_AMP := false
+BOARD_USES_EXYNOS7870_TFA_AMP := false
 
 # Display
-TARGET_SCREEN_DENSITY := 320
+TARGET_SCREEN_DENSITY := 420
 
 # Assert
 TARGET_OTA_ASSERT_DEVICE := on7xelte,on7xeltedd,on7xeltekl,on7xeltekk,on7xelteks,on7xelteub,on7xeltezt
