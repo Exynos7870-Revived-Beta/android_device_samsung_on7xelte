@@ -18,7 +18,7 @@ ifeq ($(TARGET_DEVICE),on7xelte)
 ifeq ($(FULL_KERNEL_BUILD),true)
 KERNEL_DTB_DIR := $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/dts
 KERNEL_DTBIMG := $(KERNEL_OUT)/arch/$(KERNEL_ARCH)/boot/dtb.img
-DTBTOOL := $(HOST_OUT_EXECUTABLES)/dtbhtoolExynos
+DTBTOOL := $(HOST_OUT_EXECUTABLES)/dtbhtoolExynos_on7xelte
 
 KERNEL_DTS_SRCS := $(shell find -L $(TARGET_KERNEL_SOURCE)/arch/$(KERNEL_ARCH)/boot/dts \
 	-maxdepth 1 -type f \( -name '*.dts' -o -name '*.dtsi' -o -name 'Makefile' \) 2>/dev/null)
