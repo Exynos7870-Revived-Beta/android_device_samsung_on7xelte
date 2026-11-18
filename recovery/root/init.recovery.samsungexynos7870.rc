@@ -1,3 +1,17 @@
+on init
+    # Symlink by-name paths
+    mkdir /dev/block/by-name 0755 root root
+    mkdir /dev/block/bootdevice 0755 root root
+    symlink /dev/block/platform/13540000.dwmmc0/by-name /dev/block/bootdevice/by-name
+    symlink /dev/block/platform/13540000.dwmmc0/by-name/BOOT /dev/block/by-name/boot
+    symlink /dev/block/platform/13540000.dwmmc0/by-name/RECOVERY /dev/block/by-name/recovery
+    symlink /dev/block/platform/13540000.dwmmc0/by-name/SYSTEM /dev/block/by-name/system
+    symlink /dev/block/platform/13540000.dwmmc0/by-name/VENDOR /dev/block/by-name/vendor
+    symlink /dev/block/platform/13540000.dwmmc0/by-name/BOOT /dev/block/by-name/BOOT
+    symlink /dev/block/platform/13540000.dwmmc0/by-name/RECOVERY /dev/block/by-name/RECOVERY
+    symlink /dev/block/platform/13540000.dwmmc0/by-name/SYSTEM /dev/block/by-name/SYSTEM
+    symlink /dev/block/platform/13540000.dwmmc0/by-name/VENDOR /dev/block/by-name/VENDOR
+
 on fs
     export ANDROID_ROOT /system_root
 

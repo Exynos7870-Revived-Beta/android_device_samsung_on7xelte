@@ -115,3 +115,6 @@ BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 -
 BOARD_MKBOOTIMG_ARGS += --max-image-size 0x2000000 --expect-ramdisk-compression lzma
 BOARD_CUSTOM_MKBOOTIMG = $(DEVICE_PATH)/tools/mkbootimg-dt $(HOST_OUT_EXECUTABLES)/mkbootimg
 BOARD_RAMDISK_USE_LZMA := true
+
+# Battery
+TW_USE_LEGACY_BATTERY_SERVICES := true
