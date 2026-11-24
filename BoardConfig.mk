@@ -43,10 +43,12 @@ TARGET_BOOTLOADER_BOARD_NAME := universal7870
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
 
-# Crypto (disabled - Exynos 7870 has no KeyMint/Keymaster 4+ HAL in recovery)
-# TW_INCLUDE_CRYPTO := true
-# TW_INCLUDE_CRYPTO_FBE := true
-# TW_INCLUDE_FBE := true
+# Crypto & FBE Decryption (m10lte Q blobs patched)
+TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_CRYPTO_FBE := true
+TW_INCLUDE_FBE := true
+TW_FORCE_KEYMASTER_VER := true
+TW_DEFAULT_KEYMASTER_VERSION := 3.0
 
 # Kernel
 TARGET_KERNEL_ARCH := arm64
