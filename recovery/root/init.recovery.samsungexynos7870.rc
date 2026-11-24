@@ -1,4 +1,52 @@
+on init
+    # Gatekeeper hardware module resolution
+    setprop ro.hardware.gatekeeper universal7870
+
+    # Ensure 32-bit linker and bionic libraries are reachable via /apex/com.android.runtime
+    mkdir /apex 0777 root root
+    mkdir /apex/com.android.runtime 0777 root root
+    mkdir /apex/com.android.runtime/bin 0777 root root
+    symlink /system/bin/bootstrap/linker /apex/com.android.runtime/bin/linker
+    mkdir /apex/com.android.runtime/lib 0777 root root
+    symlink /system/lib/bootstrap /apex/com.android.runtime/lib/bionic
+
 on fs
     export ANDROID_ROOT /system_root
+    export MC_AUTH_TOKEN_PATH /efs
 
-on boot
+    wait /dev/block/platform/13540000.dwmmc0
+    symlink /dev/block/platform/13540000.dwmmc0 /dev/block/bootdevice
+    symlink /dev/block/platform/13540000.dwmmc0/by-name/SYSTEM /dev/block/platform/13540000.dwmmc0/by-name/system
+
+on post-fs
+    # Mount EFS early for MobiCore auth token and Gatekeeper contexts
+    mkdir /efs 0771 radio system
+    mount ext4 /dev/block/platform/13540000.dwmmc0/by-name/EFS /efs nosuid nodev noatime
+    mkdir /efs/TEE 0770 radio system
+    mkdir /mnt/vendor/efs/TEE 0770 radio system
+
+on property:hwservicemanager.ready=true
+    start mobicore
+    start keymaster-3-0
+    start gatekeeper-1-0
+
+service mobicore /vendor/bin/mcDriverDaemon -r /vendor/app/mcRegistry/FFFFFFFF000000000000000000000001.drbin -r /vendor/app/mcRegistry/ffffffffd0000000000000000000000a.tlbin -r /vendor/app/mcRegistry/ffffffffd00000000000000000000016.tlbin
+    user root
+    group root
+    setenv LD_LIBRARY_PATH /system/lib:/vendor/lib
+    disabled
+    seclabel u:r:recovery:s0
+
+service keymaster-3-0 /vendor/bin/hw/android.hardware.keymaster@3.0-service
+    user root
+    group root drmrpc
+    setenv LD_LIBRARY_PATH /system/lib:/vendor/lib
+    disabled
+    seclabel u:r:recovery:s0
+
+service gatekeeper-1-0 /vendor/bin/hw/android.hardware.gatekeeper@1.0-service
+    user root
+    group root
+    setenv LD_LIBRARY_PATH /system/lib:/vendor/lib
+    disabled
+    seclabel u:r:recovery:s0
