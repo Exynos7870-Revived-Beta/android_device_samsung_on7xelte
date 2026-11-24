@@ -1,0 +1,27 @@
+From 0acbd1bf0c434b0dc645c2d9a2fc3b89abf225b2 Mon Sep 17 00:00:00 2001
+From: Brian Nahuel Gotte <bngotte@gmail.com>
+Date: Mon, 23 Nov 2026 20:59:20 -0300
+Subject: [PATCH 2/2] partitionmanager: Use _exit() in child decrypt process to
+ prevent C++ termination
+
+Change-Id: Icccb3a6b596874f145d6f2997d6bb0cf566fa4ea
+---
+ partitionmanager.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/partitionmanager.cpp b/partitionmanager.cpp
+index 2766b4c..c5eb0b6 100755
+--- a/partitionmanager.cpp
++++ b/partitionmanager.cpp
+@@ -2190,7 +2190,7 @@ int TWPartitionManager::Decrypt_Device(string Password, int user_id) {
+ 		char cPassword[255];
+ 		strcpy(cPassword, Password.c_str());
+ 		int ret = cryptfs_check_passwd(cPassword);
+-		exit(ret);
++		_exit(ret);
+ 	} else {
+ 		// Parent
+ 		int status;
+-- 
+2.53.0
+

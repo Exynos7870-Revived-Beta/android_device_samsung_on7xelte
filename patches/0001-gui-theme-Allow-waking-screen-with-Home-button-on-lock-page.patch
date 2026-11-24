@@ -1,0 +1,67 @@
+From 58ae2242ac9c1e0c3a5afd5e639d8047141ef91f Mon Sep 17 00:00:00 2001
+From: Brian Nahuel Gotte <bngotte@gmail.com>
+Date: Mon, 23 Nov 2026 18:53:55 -0300
+Subject: [PATCH 1/2] gui: theme: Allow waking screen with Home button on lock
+ page
+
+Add KEY_HOMEPAGE action to togglebacklight when screen is locked,
+allowing physical Home button to wake the display on supported devices.
+
+Change-Id: I4e6b184f8f37f0021e0b06c2c926880e8c2e85b7
+---
+ gui/theme/common/landscape.xml | 5 +++++
+ gui/theme/common/portrait.xml  | 5 +++++
+ gui/theme/common/watch.xml     | 5 +++++
+ 3 files changed, 15 insertions(+)
+
+diff --git a/gui/theme/common/landscape.xml b/gui/theme/common/landscape.xml
+index f56ea4d..f5d73bd 100755
+--- a/gui/theme/common/landscape.xml
++++ b/gui/theme/common/landscape.xml
+@@ -4224,6 +4224,11 @@
+ 				<touch key="power"/>
+ 				<action function="togglebacklight"/>
+ 			</action>
++
++			<action>
++				<touch key="home"/>
++				<action function="togglebacklight"/>
++			</action>
+ 		</page>
+ 
+ 		<page name="filemanagerlist">
+diff --git a/gui/theme/common/portrait.xml b/gui/theme/common/portrait.xml
+index 8b5324b..9a8011b 100755
+--- a/gui/theme/common/portrait.xml
++++ b/gui/theme/common/portrait.xml
+@@ -4350,6 +4350,11 @@
+ 				<touch key="power"/>
+ 				<action function="togglebacklight"/>
+ 			</action>
++
++			<action>
++				<touch key="home"/>
++				<action function="togglebacklight"/>
++			</action>
+ 		</page>
+ 
+ 		<page name="filemanagerlist">
+diff --git a/gui/theme/common/watch.xml b/gui/theme/common/watch.xml
+index 9e3a232..99e5b3f 100755
+--- a/gui/theme/common/watch.xml
++++ b/gui/theme/common/watch.xml
+@@ -4965,6 +4965,11 @@
+ 				<touch key="power"/>
+ 				<action function="togglebacklight"/>
+ 			</action>
++
++			<action>
++				<touch key="home"/>
++				<action function="togglebacklight"/>
++			</action>
+ 		</page>
+ 
+ 		<page name="filemanagerlist">
+-- 
+2.53.0
+
