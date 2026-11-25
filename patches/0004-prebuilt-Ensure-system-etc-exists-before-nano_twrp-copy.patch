@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: batuhantrkgl <batuhanturkoglu37@gmail.com>
+Date: Wed, 25 Nov 2026 21:14:00 +0300
+Subject: [PATCH] prebuilt: Ensure system/etc exists before nano_twrp copy
+
+Ensure $(TARGET_RECOVERY_ROOT_OUT)/system/etc/ exists before copying
+nano config and terminfo files, preventing a race condition failure on
+clean parallel builds.
+---
+ prebuilt/Android.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/prebuilt/Android.mk b/prebuilt/Android.mk
+index 3197ec1..ef66e9e 100755
+--- a/prebuilt/Android.mk
++++ b/prebuilt/Android.mk
+@@ -556,6 +556,7 @@ LOCAL_MODULE_CLASS := ETC
+ LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT)/system/bin
+ LOCAL_REQUIRED_MODULES := nano libncurses
+ LOCAL_POST_INSTALL_CMD += \
++    mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/system/etc/; \
+     cp -rf $(TARGET_OUT_SYSTEM_EXT_ETC)/nano $(TARGET_RECOVERY_ROOT_OUT)/system/etc/; \
+     cp -rf external/libncurses/lib/terminfo $(TARGET_RECOVERY_ROOT_OUT)/system/etc/;
+ include $(BUILD_PHONY_PACKAGE)
+-- 
+2.39.5
