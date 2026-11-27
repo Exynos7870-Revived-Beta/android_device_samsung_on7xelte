@@ -24,10 +24,6 @@ $(call inherit-product, vendor/twrp/config/common.mk)
 
 PRODUCT_RELEASE_NAME := on7xelte
 
-PRODUCT_PACKAGES += \
-    charger \
-    charger_res_images
-
 # DTBH packer used by build/tasks/dtb.mk
 PRODUCT_HOST_PACKAGES += dtbhtoolExynos
 
