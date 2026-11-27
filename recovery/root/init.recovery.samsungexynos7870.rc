@@ -10,6 +10,10 @@ on init
     mkdir /apex/com.android.runtime/lib 0777 root root
     symlink /system/lib/bootstrap /apex/com.android.runtime/lib/bionic
 
+    # Symlink /sbin/linker* for legacy TWRP zip binaries
+    symlink /system/bin/linker /sbin/linker
+    symlink /system/bin/linker64 /sbin/linker64
+
 on fs
     export ANDROID_ROOT /system_root
     export MC_AUTH_TOKEN_PATH /efs
