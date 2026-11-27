@@ -43,6 +43,8 @@ PROGNAME="mkbootimg-dt"
 # the A3 RECOVERY partition capacity from its stock PIT; BoardConfig.mk
 # passes the same value, and this is the fallback for a caller without one
 DEFAULT_MAX_IMAGE_SIZE=39845888
+# Exynos7870 sboot rejects recovery ramdisks larger than 14 MiB
+DEFAULT_MAX_RAMDISK_SIZE=14680064
 
 die() {
 	echo "${PROGNAME}: $*" >&2
@@ -94,6 +96,7 @@ second=""
 pagesize=2048
 header_version=0
 max_image_size="${DEFAULT_MAX_IMAGE_SIZE}"
+max_ramdisk_size="${DEFAULT_MAX_RAMDISK_SIZE}"
 expect_compression=""
 args=()
 
@@ -121,6 +124,17 @@ while [ $# -gt 0 ]; do
 		;;
 	--max-image-size=*)
 		max_image_size="${arg#--max-image-size=}"
+		shift
+		continue
+		;;
+	--max-ramdisk-size)
+		[ $# -ge 2 ] || die "--max-ramdisk-size needs a byte count"
+		max_ramdisk_size="$2"
+		shift 2
+		continue
+		;;
+	--max-ramdisk-size=*)
+		max_ramdisk_size="${arg#--max-ramdisk-size=}"
 		shift
 		continue
 		;;
@@ -206,6 +220,21 @@ none|off|no|0)
 		die "invalid --max-image-size '${max_image_size}'"
 	[ "${max_image_size}" -gt 0 ] ||
 		die "invalid --max-image-size '${max_image_size}'"
+	;;
+esac
+
+case "${max_ramdisk_size}" in
+none|off|no|0)
+	max_ramdisk_size=""
+	;;
+''|*[!0-9a-fA-FxX]*)
+	die "invalid --max-ramdisk-size '${max_ramdisk_size}'"
+	;;
+*)
+	max_ramdisk_size=$((max_ramdisk_size)) ||
+		die "invalid --max-ramdisk-size '${max_ramdisk_size}'"
+	[ "${max_ramdisk_size}" -gt 0 ] ||
+		die "invalid --max-ramdisk-size '${max_ramdisk_size}'"
 	;;
 esac
 
@@ -349,6 +378,16 @@ if [ $((rc & 2)) -ne 0 ]; then
 	  build/tasks/ramdisk.mk does that by itself whenever the setting
 	  changes.
 	EOF
+fi
+
+if [ -n "${max_ramdisk_size}" ] && [ -n "${ramdisk}" ] && [ -f "${ramdisk}" ]; then
+	ramdisk_size=$(file_size "${ramdisk}")
+	if [ "${ramdisk_size}" -gt "${max_ramdisk_size}" ]; then
+		echo "   [FAIL] ramdisk ${ramdisk_size} bytes exceeds ${max_ramdisk_size} byte sboot cap ($((ramdisk_size - max_ramdisk_size)) bytes over)" >&2
+		rm -f "${output}"
+		die "'${output}' removed: ramdisk exceeds ${max_ramdisk_size} byte cap (sboot rejects >14 MiB with 'invalid ramdisk length')"
+	fi
+	echo "   [ok]   ramdisk ${ramdisk_size} bytes fits ${max_ramdisk_size} byte cap ($((max_ramdisk_size - ramdisk_size)) bytes spare)"
 fi
 
 if [ ${rc} -ne 0 ]; then
