@@ -102,10 +102,9 @@ TARGET_USES_LOGD := true
 TW_USE_TOOLBOX := true
 TW_EXCLUDE_BASH := true
 TW_EXCLUDE_NANO := true
+TW_EXCLUDE_ZIP := true
+TW_NO_EXFAT_FUSE := true
 TW_NO_REBOOT_BOOTLOADER := true
-
-# exFAT FS Support
-TW_INCLUDE_FUSE_EXFAT := true
 
 # NTFS Support
 TW_INCLUDE_FUSE_NTFS := true
