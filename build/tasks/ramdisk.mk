@@ -1,5 +1,9 @@
 ifeq ($(TARGET_DEVICE),on7xelte)
 
+ifeq ($(BOARD_RAMDISK_USE_LZMA),true)
+COMPRESSION_COMMAND := $(LZMA) -9 -f -c
+endif
+
 RAMDISK_COMPRESSION_STAMP := $(PRODUCT_OUT)/obj/recovery-ramdisk-compression.txt
 
 ifneq ($(strip $(recovery_ramdisk)),)
